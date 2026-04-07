@@ -87,5 +87,8 @@ The project uses a simple pipe-delimited protocol:
 - **Microcontroller Constraints:** Managing memory and display real-estate by offloading logic to a more powerful backend.
 - **Microcontroller Hardware Setup:** Connection GPIO pins and correct use of grounding.
 
+## Disclaimer
+This project is for **educational and personal use only**. It is intended to demonstrate hardware-software bridging and API integration patterns. All sports data and trademarks belong to their respective owners. The author does not claim ownership of the data provided by external APIs.
+
 ## ⚖️ License
 MIT - Feel free to use this for your own hobby projects!
