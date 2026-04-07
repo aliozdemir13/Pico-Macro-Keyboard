@@ -3,7 +3,6 @@
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Raspberry Pi Pico](https://img.shields.io/badge/Raspberry_Pi_Pico-C51A4A?style=for-the-badge&logo=raspberrypi&logoColor=white)
 ![CircuitPython](https://img.shields.io/badge/CircuitPython-000000?style=for-the-badge&logo=python&logoColor=white)
-![API ESPN](https://img.shields.io/badge/API-ESPN-CC0000?style=for-the-badge)
 ![API OpenF1](https://img.shields.io/badge/API-OpenF1-FF1801?style=for-the-badge)
 ![License MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
