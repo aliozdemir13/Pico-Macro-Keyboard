@@ -156,4 +156,67 @@ const mockNflData = {
     ]
 };
 
-module.exports = { mockResponseNBA, mockUclData, mockNflData };
+const mockNascarData = {
+    events: [
+        {
+            id: '202602150001',
+            shortName: 'Daytona 500', 
+            competitions: [
+            {
+                competitors: [
+                {
+                    athlete: { shortName: 'Byron' }
+                }
+                ]
+            }
+            ]
+        },
+        {
+            id: '202602220025',
+            shortName: 'NASCAR Cup Series at Atlanta',
+            competitions: [
+            {
+                competitors: [
+                {
+                    athlete: { shortName: 'Suarez' }
+                }
+                ]
+            }
+            ]
+        }
+        ]
+};
+
+mockUelData = {
+    events: [
+    {
+        id: '401862895',
+        uid: 's:600~l:775~e:401862895',
+        date: '2026-05-07T19:00Z',
+        name: 'Aston Villa at Nottingham Forest',
+        shortName: 'AVL @ NFO',
+        // 1. Status must be at this level
+        status: {
+        type: {
+            shortDetail: 'FT' // Final Time
+        }
+        },
+        // 2. Expand the competitions array
+        competitions: [
+        {
+            competitors: [
+            {
+                team: { abbreviation: 'AVL' },
+                score: '2'
+            },
+            {
+                team: { abbreviation: 'NFO' },
+                score: '1'
+            }
+            ]
+        }
+        ]
+    }]
+};
+
+module.exports = { mockResponseNBA, mockUclData, mockNflData, mockNascarData, mockUelData };

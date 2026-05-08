@@ -27,8 +27,9 @@ async function fetchData() {
         if (currentSport === 'F1') {
             const item = await openF1ApiClient.loadF1ByIndex(currentIndex);
             data = item ? [item] : [];
-        } else {
+        } else {            
             data = await espnApiClient.fetchEspnData(currentSport, '', {});
+            console.log('test debug ', data)
         }
 
         masterList = data;
@@ -71,8 +72,14 @@ function sendToPico() {
         row1 = `1-${winnerName}`.substring(0, 20);
         row2 = circuit.substring(0, 20);
     } else {
-        const team1 = item.competitions[0].competitors[0];
-        const team2 = item.competitions[0].competitors[1];
+        const team1 = item.competitions?.[0]?.competitors?.[0];
+        const team2 = item.competitions?.[0]?.competitors?.[1];
+        
+        if (!team1 || !team2 || !item.status) {
+            serialPortHandler.sendToPico(currentSport, "Data Error");
+            return;
+        }
+
         const status = item.status.type.shortDetail.substring(0, 16) !== 'Scheduled' ?
                         item.status.type.shortDetail.substring(0, 16) :
                         formatToLocal(new Date(item.date)).replace(', ', ' - ').substring(0, 16);
@@ -111,5 +118,26 @@ serialPortHandler.setupCommandListener((cmd) => {
     }
 });
 
-setTimeout(fetchData, 2000);
-setInterval(fetchData, 300000);
+function start() {
+    setTimeout(fetchData, 2000);
+    setInterval(fetchData, 300000);
+}
+
+if (require.main === module) {
+    start();
+}
+
+// Export for testing
+module.exports = {
+    espnApiClient,
+    openF1ApiClient,
+    serialPortHandler,
+    fetchData,
+    sendToPico,
+    start,
+    getSportIndex: () => sportIndex,
+    setSportIndex: (val) => sportIndex = val,
+    getMasterList: () => masterList,
+    setMasterList: (val) => masterList = val,
+    setCurrentIndex: (val) => currentIndex = val
+};

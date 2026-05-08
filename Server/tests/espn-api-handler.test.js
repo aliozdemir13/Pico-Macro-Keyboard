@@ -2,7 +2,7 @@ const { test, describe, beforeEach } = require('node:test');
 const assert = require('node:assert');
 const axios = require('axios');
 const EspnApiClient = require('../handlers/espn-api-handler');
-const { mockResponseNBA, mockUclData } = require('../tests/mock-data')
+const { mockResponseNBA, mockUclData, mockNflData,mockNascarData } = require('../tests/mock-data')
 
 describe('EspnApiClient', () => {
     let client;
@@ -49,5 +49,43 @@ describe('EspnApiClient', () => {
         // Assertions
         assert.strictEqual(getMock.mock.calls.length, 1);
         assert.deepStrictEqual(result, mockUclData.events);
+    });
+
+    test('process NFL data', async (t) => {
+        // Mocking axios.get
+        const getMock = t.mock.method(axios, 'get', async () => {
+            return { status: 200, data: mockNflData };
+        });
+
+        const result = await client.fetchEspnData('NFL', baseUrl, {});
+
+        // Assertions
+        assert.strictEqual(getMock.mock.calls.length, 1);
+        assert.deepStrictEqual(result, mockNflData.events);
+    });
+
+    test('process Nascar data', async (t) => {
+        // Mocking axios.get
+        const getMock = t.mock.method(axios, 'get', async () => {
+            return { status: 200, data: mockNascarData };
+        });
+
+        const result = await client.fetchEspnData('NASCAR', baseUrl, {});
+
+        // Assertions
+        assert.strictEqual(getMock.mock.calls.length, 1);
+        assert.deepStrictEqual(result, mockNascarData.events);
+    });
+
+    test('error case', async (t) => {
+        // Mocking axios.get
+        const getMock = t.mock.method(axios, 'get', async () => {
+            return null;
+        });
+
+        const result = await client.fetchEspnData('NASCAR', baseUrl, {});
+
+        // Assertions
+        assert.strictEqual(result, undefined);
     });
 });

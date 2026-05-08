@@ -19,13 +19,13 @@ class EspnApiClient extends ApiClient {
                 return res.events || [];
             } else if (currentSport === 'NFL') {
                 const res = await this.request('get', `${this.baseUrl}/football/nfl/scoreboard`);
-                console.log('res ', res)
                 return res.events || [];
             } else if (currentSport === 'NASCAR' || currentSport === 'IRL') {
                 const slug = currentSport === 'NASCAR' ? 'nascar-premier' : 'irl';
                 const beginning = utils.getEspnDate(-utils.getDaysSinceNewYear())
                 const today = utils.getEspnDate(0);
                 const res = await this.request('get', `${this.baseUrl}/racing/${slug}/scoreboard?dates=${beginning}-${today}`);
+                console.log('res ', res)
                 return res.events || [];
             }
         } catch (error) {
