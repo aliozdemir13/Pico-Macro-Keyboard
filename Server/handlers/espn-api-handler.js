@@ -19,6 +19,7 @@ class EspnApiClient extends ApiClient {
                 return res.events || [];
             } else if (currentSport === 'NFL') {
                 const res = await this.request('get', `${this.baseUrl}/football/nfl/scoreboard`);
+                console.log('res ', res)
                 return res.events || [];
             } else if (currentSport === 'NASCAR' || currentSport === 'IRL') {
                 const slug = currentSport === 'NASCAR' ? 'nascar-premier' : 'irl';
