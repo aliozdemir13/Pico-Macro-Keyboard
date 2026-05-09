@@ -1,4 +1,4 @@
-const { test, describe, beforeEach } = require('node:test');
+const { test, describe } = require('node:test');
 const assert = require('node:assert');
 
 // Same mock approach used in other tests to intercept SerialPort interactions without needing actual hardware. 
