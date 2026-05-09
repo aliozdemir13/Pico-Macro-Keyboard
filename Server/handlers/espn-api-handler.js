@@ -25,6 +25,7 @@ class EspnApiClient extends ApiClient {
                 const beginning = utils.getEspnDate(-utils.getDaysSinceNewYear())
                 const today = utils.getEspnDate(0);
                 const res = await this.request('get', `${this.baseUrl}/racing/${slug}/scoreboard?dates=${beginning}-${today}`);
+                console.log('res ', res)
                 return res.events || [];
             }
         } catch (error) {

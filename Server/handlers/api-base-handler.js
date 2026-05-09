@@ -7,7 +7,7 @@ class ApiClient {
 
     async request(method, endpoint, params = {}, data = null) {
         const url = `${endpoint}`;
-
+        console.log('test debug: '+ method + endpoint + params )
         try {
             let response;
             switch (method.toLowerCase()) {

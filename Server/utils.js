@@ -12,7 +12,8 @@ function formatToLocal(isoString) {
         day: '2-digit',
         hour: 'numeric',
         minute: '2-digit',
-        hour12: false
+        hour12: false,
+        timeZone: 'Europe/Berlin'
     });
 }
 
