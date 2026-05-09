@@ -9,7 +9,7 @@
   "scripts": {
     "test": "test",
     "lint": "eslint .",
-    "test:coverage": "c8 --check-coverage --lines 90 node --test tests/*.test.js",
+    "test:coverage": "c8 --check-coverage --lines 90 node --test tests/*.test.js"
   },
   "dependencies": {
     "axios": "^1.13.2",
