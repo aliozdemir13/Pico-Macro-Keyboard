@@ -2,7 +2,7 @@ const { test, describe, beforeEach } = require('node:test');
 const assert = require('node:assert');
 const axios = require('axios');
 const EspnApiClient = require('../handlers/espn-api-handler');
-const { mockResponseNBA, mockUclData, mockNflData,mockNascarData } = require('../tests/mock-data')
+const { mockResponseNBA, mockUclData, mockNflData,mockNascarData, mockUelData } = require('../tests/mock-data')
 
 describe('EspnApiClient', () => {
     let client;

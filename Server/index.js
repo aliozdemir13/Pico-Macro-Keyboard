@@ -47,9 +47,10 @@ function sendToPico() {
         return;
     }
 
-    let row1 = '', row2 = '';
     const item = masterList[currentSport === 'F1' ? 0 : currentIndex];
 
+    
+    let row1, row2;
     // Custom logic for each sport
     if (currentSport === 'F1') {
         row1 = item.row1;

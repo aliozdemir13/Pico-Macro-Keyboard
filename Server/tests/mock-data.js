@@ -41,7 +41,7 @@ const mockResponseNBA = {
     ]
 };
 
-mockUclData = {
+const mockUclData = {
     events: [
         {
             id: '401862895',
@@ -187,7 +187,7 @@ const mockNascarData = {
         ]
 };
 
-mockUelData = {
+const mockUelData = {
     events: [
     {
         id: '401862895',

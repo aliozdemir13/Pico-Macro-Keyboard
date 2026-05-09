@@ -91,7 +91,12 @@ describe('ApiClient', () => {
 
     test('handle unexpected response code', async (t) => {
         t.mock.method(axios, 'get', async () => {
-            error.response = { status: 350, data: '' };
+            // Create the error object first
+            const mockError = new Error('Unexpected Status');
+            mockError.response = { status: 350, data: '' };
+            
+            // You must THROW it for the ApiClient to catch it in its try/catch block
+            throw mockError; 
         });
 
         // Suppress console.error during test to keep output clean
