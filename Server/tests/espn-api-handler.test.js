@@ -38,17 +38,17 @@ describe('EspnApiClient', () => {
         assert.deepStrictEqual(result, mockUclData.events);
     });
 
-    test('process UCL data', async (t) => {
+    test('process UEL data', async (t) => {
         // Mocking axios.get
         const getMock = t.mock.method(axios, 'get', async () => {
-            return { status: 200, data: mockUclData };
+            return { status: 200, data: mockUelData };
         });
 
-        const result = await client.fetchEspnData('UCL', baseUrl, {});
+        const result = await client.fetchEspnData('UEL', baseUrl, {});
 
         // Assertions
         assert.strictEqual(getMock.mock.calls.length, 1);
-        assert.deepStrictEqual(result, mockUclData.events);
+        assert.deepStrictEqual(result, mockUelData.events);
     });
 
     test('process NFL data', async (t) => {
@@ -71,6 +71,19 @@ describe('EspnApiClient', () => {
         });
 
         const result = await client.fetchEspnData('NASCAR', baseUrl, {});
+
+        // Assertions
+        assert.strictEqual(getMock.mock.calls.length, 1);
+        assert.deepStrictEqual(result, mockNascarData.events);
+    });
+
+    test('process IRL data', async (t) => {
+        // Mocking axios.get
+        const getMock = t.mock.method(axios, 'get', async () => {
+            return { status: 200, data: mockNascarData };
+        });
+
+        const result = await client.fetchEspnData('IRL', baseUrl, {});
 
         // Assertions
         assert.strictEqual(getMock.mock.calls.length, 1);

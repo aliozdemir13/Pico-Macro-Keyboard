@@ -119,6 +119,50 @@ describe('Sports Results Integration Logic Commands Test', () => {
         assert.strictEqual(app.getSportIndex(), 1, "Sport Index should have moved to UCL (1)");
     });
 
+    test('Command Listener: Toggle Logic For Same Sport (CMD:NEXT)', async (t) => {
+        // 1. Setup Mock
+        t.mock.method(app.espnApiClient, 'fetchEspnData', async () => mockResponseNBA.events);
+        const portWriteSpy = t.mock.method(app.serialPortHandler, 'sendToPico', () => {});
+
+        // 2. IMPORTANT: Manually prepare the state for NBA
+        app.setSportIndex(0); 
+        app.setCurrentIndex(0);
+        
+        // 3. IMPORTANT: You MUST populate the masterList first. 
+        // Otherwise, CMD:NEXT sees an empty list and does nothing.
+        await app.fetchData(); 
+        
+        // Clear the spy so we only count the call from CMD:NEXT
+        portWriteSpy.mock.resetCalls();
+
+        // 4. Trigger NEXT
+        app.serialPortHandler.parser.emit('data', 'CMD:NEXT');
+
+        // CMD:NEXT logic is synchronous for ESPN sports, but good practice to wait
+        await new Promise(res => setImmediate(res));
+        
+        const calls = portWriteSpy.mock.calls;
+
+        // 5. Assertions
+        assert.strictEqual(app.getSportIndex(), 0, "Sport Index should remain as NBA (0)");
+        assert.strictEqual(calls.length, 1, "sendToPico should have been called once");
+        assert.ok(calls[0].arguments[0].includes('LAL 125v98 OKC'), "Should show the second game in the list");
+    });
+
+    test('Coverage: F1 CMD:NEXT', async (t) => {
+        app.setSportIndex(3); // F1
+        app.setCurrentIndex(0);
+        // Mock the internal session array length
+        app.openF1ApiClient.f1Sessions = [{}, {}]; 
+        
+        t.mock.method(app.openF1ApiClient, 'loadF1ByIndex', async () => ({row1:'a', row2:'b'}));
+        
+        app.serialPortHandler.parser.emit('data', 'CMD:NEXT');
+        
+        // Check if index incremented
+        assert.strictEqual(app.getSportIndex(), 3);
+    });
+
     test('Error Handling: API Failure coverage', async (t) => {
         t.mock.method(app.espnApiClient, 'fetchEspnData', async () => {
             throw new Error("Network Timeout");
@@ -128,5 +172,49 @@ describe('Sports Results Integration Logic Commands Test', () => {
         await app.fetchData();
 
         assert.ok(portWriteSpy.mock.calls[0].arguments[0].includes('API ERROR'));
+    });
+
+    test('Coverage: F1 returns null data', async (t) => {
+        app.setSportIndex(3); // F1
+        t.mock.method(app.openF1ApiClient, 'loadF1ByIndex', async () => null);
+        await app.fetchData();
+        assert.strictEqual(app.getMasterList().length, 0);
+    });
+
+    test('Coverage: Empty Master List', (t) => {
+        app.setMasterList([]);
+        const spy = t.mock.method(app.serialPortHandler, 'sendToPico', () => {});
+        app.sendToPico();
+        assert.ok(spy.mock.calls[0].arguments[0].includes('No Data Found'));
+    });
+
+    test('Coverage: NASCAR/IRL String Variations', (t) => {
+        const spy = t.mock.method(app.serialPortHandler, 'sendToPico', () => {});
+        app.setSportIndex(5); // NASCAR
+
+        // Test All-Caps branch
+        app.setMasterList([{ 
+            shortName: 'NASCAR CUP SERIES AT TALLADEGA',
+            competitions: [{ competitors: [{ athlete: { shortName: 'Busch' } }] }] 
+        }]);
+        app.sendToPico();
+        assert.strictEqual(spy.mock.calls[0].arguments[1], 'AT TALLADEGA');
+
+        // Test Grand Prix branch
+        app.setMasterList([{ 
+            shortName: 'Grand Prix of Long Beach',
+            competitions: [{ competitors: [{ athlete: { shortName: 'Dixon' } }] }] 
+        }]);
+        app.sendToPico();
+        assert.strictEqual(spy.mock.calls[1].arguments[1], 'Long Beach');
+    });
+
+    test('Coverage: Malformed ESPN Data', (t) => {
+        app.setSportIndex(0); // NBA
+        app.setMasterList([{ status: null }]); // Missing teams and status
+        const spy = t.mock.method(app.serialPortHandler, 'sendToPico', () => {});
+        
+        app.sendToPico();
+        assert.ok(spy.mock.calls[0].arguments[1].includes('Data Error'));
     });
 });

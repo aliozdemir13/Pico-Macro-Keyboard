@@ -1,0 +1,39 @@
+name: Node.js CI Validation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x] # Test on current LTS and latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Tests with Coverage Threshold
+        run: npm run test:coverage
+        env:
+          # Mock env variables for tests if needed
+          ESPN_BASE_URL: "https://api.test.com"
+          OPENF1_BASE_URL: "https://api.test.com"
+          PICO_PORT: "COM3"

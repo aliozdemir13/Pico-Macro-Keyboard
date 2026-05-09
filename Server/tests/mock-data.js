@@ -219,4 +219,38 @@ mockUelData = {
     }]
 };
 
-module.exports = { mockResponseNBA, mockUclData, mockNflData, mockNascarData, mockUelData };
+const mockSessions = [
+    {
+        session_key: 9500,
+        date_start: "2024-03-02T15:00:00Z",
+        circuit_short_name: "Sakhir",
+        session_name: "Race"
+    },
+    {
+        session_key: 9505,
+        date_start: "2024-07-28T13:00:00Z",
+        circuit_short_name: "Spa-Francorchamps",
+        session_name: "Grand Prix"
+    },
+    {
+        session_key: 9520,
+        date_start: "2024-11-03T17:00:00Z",
+        circuit_short_name: "Interlagos",
+        session_name: "Race"
+    }
+];
+
+const mockSessionResults = [
+    { position: 1, driver_number: 1, session_key: 9500 },
+    { position: 2, driver_number: 11, session_key: 9500 },
+    { position: 3, driver_number: 14, session_key: 9500 }
+];
+
+const mockDrivers = [
+    { driver_number: 1, name_acronym: "VER", team_name: "Red Bull Racing" },
+    { driver_number: 11, name_acronym: "PER", team_name: "Red Bull Racing" },
+    { driver_number: 14, name_acronym: "ALO", team_name: "Aston Martin" },
+    { driver_number: 44, name_acronym: "HAM", team_name: "Mercedes" }
+];
+
+module.exports = { mockResponseNBA, mockUclData, mockNflData, mockNascarData, mockUelData, mockSessions, mockSessionResults, mockDrivers };

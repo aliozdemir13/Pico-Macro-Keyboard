@@ -29,7 +29,6 @@ async function fetchData() {
             data = item ? [item] : [];
         } else {            
             data = await espnApiClient.fetchEspnData(currentSport, '', {});
-            console.log('test debug ', data)
         }
 
         masterList = data;

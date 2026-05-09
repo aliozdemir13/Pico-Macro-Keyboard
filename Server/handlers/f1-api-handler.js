@@ -30,7 +30,9 @@ class OpenF1ApiClient extends ApiClient {
             console.log('F1 Background Loading started...');
             try {
                 const res = await this.request('get', `${this.baseUrl}/sessions?year=${currentYear}&session_type=Race`);
+                console.log(`F1 Background Loading: ${res.length} sessions fetched.`);
                 this.f1Sessions = res || [];
+                //console.log(`F1 Background Loading completed. ${this.f1Sessions} sessions loaded.`);
                 this.sessionsLoaded = true;
             } catch (error) {
                 console.error(`Error loading F1 session list: ${error.message}`);
